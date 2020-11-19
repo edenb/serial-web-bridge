@@ -3,7 +3,7 @@ const socketio = require('socket.io');
 
 const info = {version: '1.0.0'};
 
-// Create socket server
+// Create Socket IO server
 const io = socketio();
 
 io.on('connection', client => {
@@ -62,5 +62,5 @@ serial.on('scanready', (portList) => {
   console.log(portList);
 });
 
-// Start socket IO server
-io.listen(4000);
+// Start Socket IO server
+io.listen(4000, {cookie: false});
