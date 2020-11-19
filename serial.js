@@ -25,7 +25,7 @@ module.exports = class Serial extends EventEmitter {
     switch (parser) {
       case 'Readline':
         // Example options: { delimiter: '\r\n' }
-        newParser = this.port.pipe(new Readline(parserOptions));
+        newParser = newPort.pipe(new Readline(parserOptions));
         break;
       case 'InterByteTimeout':
         // Example options: {interval: 100, maxBufferSize: 4096}
@@ -33,7 +33,7 @@ module.exports = class Serial extends EventEmitter {
         break;
       default:
         // Readline = default parser
-        newParser = this.port.pipe(new Readline({ delimiter: '\r\n' }));
+        newParser = newPort.pipe(new Readline({ delimiter: '\r\n' }));
     }
     newParser.on('data', (data) => {
       this.emit('data', data);
