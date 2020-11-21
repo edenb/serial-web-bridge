@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Arduino Serial Monitor</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 10;
+    }
+    .full-height {
+      height: 100%;
+    }
+  </style>
+  <script src = "https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
+  <script>
+    const bridgeConnectTxt = "USB Socket.IO bridge connected"
+    const bridgeDisconnectTxt = "No USB Socket.IO bridge"
+    let pathList = []
+    const baudrateList = [300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 74880, 115200,
+      230400, 250000, 500000, 1000000, 2000000]
+    const baudrateDefault = 115200
+    let baudrate = baudrateDefault
+    let selPath = ""
+    let curPath = ""
+    let curPathOpen = false
+    let curPathErr = ""
+    let pendingOpen = false
+    const socket = io('http://localhost:4000');
+    socket.on('connect', function() {
+      document.getElementById("bridge-state-container").innerHTML = bridgeConnectTxt
+      socket.emit('info');
+      socket.emit('startscan', 1, []);
+      createBaudrateList(baudrateList);
+    });
+    socket.on('disconnect', function() {
+      document.getElementById("bridge-state-container").innerHTML = bridgeDisconnectTxt
+      document.getElementById("path-list-container").innerHTML = ""
+      document.getElementById("path-container").innerHTML = ""
+    });
+    socket.on('port', function(open, path, err) {
+      if (path !== selPath && pendingOpen) {
+        openPath();
+        pendingOpen = false;
+      }
+      curPath = path;
+      curPathOpen = open;
+      curPathErr = err;
+      updateSelectedPath();
+      updatePathList();
+    });
+    socket.on('info', function(info) {
+      document.getElementById("bridge-state-container").innerHTML = bridgeConnectTxt + " (V" + info.version + ")"
+    });
+    socket.on('scanready', function(data) {
+      pathList = []
+      data.forEach(function(item) {
+        pathList.push(item.path)
+      });
+      updatePathList();
+    });
+    socket.on('read', function(data) {
+      const output = new TextDecoder().decode(data);
+      document.getElementById("outputSection").innerHTML += output
+    });
+    function setPath(objButton) {
+      selPath = objButton.value
+      updateSelectedPath();
+      if (!curPathOpen) {
+        openPath();
+      } else {
+        if (curPath === selPath) {
+          socket.emit('close');
+        } else {
+          socket.emit('close');
+          pendingOpen = true;
+        }
+      }
+    };
+    function openPath() {
+      socket.emit('open', selPath, Number(baudrate), 'InterByteTimeout', {interval: 100, maxBufferSize: 4096});
+    };
+    function updateSelectedPath() {
+      let curPathState = '-'
+      if (curPath !== '') {
+        curPathState = curPathOpen ? 'open' : 'close'
+      }
+      document.getElementById("path-container").innerHTML = 'Selected port: \
+        ' + curPath + '<span &ensp;/> (' + curPathState  + ')'
+    };
+    function updatePathList() {
+      if (curPathErr === '') {
+        document.getElementById("error-container").innerHTML = ""
+      } else {
+        document.getElementById("error-container").innerHTML = curPathErr
+      }
+      document.getElementById("path-list-container").innerHTML = "Available ports:"
+      pathList.forEach(function(path) {
+        let color = "background-color:gray;color:white"
+        if (path === curPath && curPathOpen) {
+          color = "background-color:green;color:white"
+        }
+        if (path === curPath && curPathErr !== '') {
+          color = "background-color:red;color:white"
+        }   
+        document.getElementById("path-list-container").innerHTML += '<span &ensp;/>\
+          <button type = "button" style="' + color + '" value = "' + path + '"\
+          onclick = "setPath(this)">' + path + '</button>';
+      });
+    };
+    function createBaudrateList(list) {
+      const sel = document.getElementById('baudrate');
+      removeOptions(sel);
+      for(var i = 0; i < list.length; i++) {
+        let opt = document.createElement('option');
+        opt.innerHTML = list[i] + ' baud';
+        opt.value = list[i];
+        if (list[i] === baudrateDefault) {
+          opt.selected = 'selected'
+        }
+        sel.appendChild(opt);
+      }
+    }
+    function removeOptions(selectElement) {
+      var i, L = selectElement.options.length - 1;
+      for(i = L; i >= 0; i--) {
+        selectElement.remove(i);
+      }
+    }
+    function setBaudrate(selBaudrate) {
+      baudrate = selBaudrate
+    }
+    function send() {
+      let data = document.getElementById("input").value
+      socket.emit('write', data);
+    }
+  </script>
+</head>
+<body>
+  <div id = "bridge-state-container">No USB Socket.IO bridge</div>
+  <div id = "path-list-container"></div>
+  <div id = "error-container"></div>
+  <div id = "path-container"></div>
+  <div>
+    <select id="baudrate" onchange="setBaudrate(this.value);"></select>
+  </div>
+  <div id="inputSection" style="position:relative;width:100%;height:25px;padding:10px;">
+    <div id="inputWrapper" style="position:absolute;display:inline-block;left:0;right:140px;">
+      <input id="input" type="text" name="name" value="" style="width:100%;">
+    </div>
+    <div>
+      <button type="button" name="send" style="position:absolute;display:inline-block;right:20px;width:100px;" onclick="send()">
+        Send
+      </button>
+    </div>
+  </div>
+  <div id="outputSection" class="full-height" style="white-space:pre;font-family:courier;font-size:16px;"></div>
+</body>
+</html>
