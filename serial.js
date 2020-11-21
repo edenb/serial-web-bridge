@@ -16,10 +16,10 @@ module.exports = class Serial extends EventEmitter {
   create(path, baudRate, parser, parserOptions) {
     let newPort = new SerialPort(path, { autoOpen: false, baudRate: baudRate });
     newPort.on('open', () => {
-      this.emit('open');
+      this.emit('open', newPort.path, '');
     })
     newPort.on('close', () => {
-      this.emit('close');
+      this.emit('close', newPort.path, '');
     })
     let newParser = {};
     switch (parser) {
@@ -49,6 +49,7 @@ module.exports = class Serial extends EventEmitter {
     if (!this.port.isOpen) {
       this.port.open((err) => {
         if (err) {
+          this.emit('close', this.port.path, err.message);
           return console.log('Error opening port: ', err.message)
         }
       });
@@ -59,6 +60,8 @@ module.exports = class Serial extends EventEmitter {
     if (this.port !== null && this.port.isOpen) {
       this.port.close((err) => {
         if (err) {
+          // ToDo: or emit open? When does this happen?
+          this.emit('close', this.port.path, err.message);
           return console.log('Error closing port: ', err.message)
         }
       });

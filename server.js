@@ -9,9 +9,9 @@ const io = socketio();
 io.on('connection', client => {
   console.log('Socket connected')
   if (serial.isOpen()) {
-    io.emit('port', 'open');
+    io.emit('port', true, serial.path, '');
   } else {
-    io.emit('port', 'closed');
+    io.emit('port', false, '', '');
   }
   client.on('info', () => {
     io.emit('info', info);
@@ -42,13 +42,13 @@ io.on('connection', client => {
 // Create serial port manager
 const serial = new Serial();
 
-serial.on('open', () => {
-  io.emit('port', 'open');
+serial.on('open', (path, err) => {
+  io.emit('port', true, path, err);
   console.log('Port is open');
 });
 
-serial.on('close', () => {
-  io.emit('port', 'closed');
+serial.on('close', (path, err) => {
+  io.emit('port', false, path, err);
   console.log('Port is closed');
 });
 
