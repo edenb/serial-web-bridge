@@ -86,15 +86,18 @@ module.exports = class Serial extends EventEmitter {
       clearInterval(this.scanTimer)
       this.scanTimer = null;
     }
-    this.scanTimer = setInterval(() => {
-      this.singleScan(productVendorList)
-        .then((portList) => {
-          this.emit('scanready', portList);
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    }, interval < 1 ? 1000:interval*1000);
+    this._startOneScan(productVendorList)
+    this.scanTimer = setInterval(() => {this._startOneScan(productVendorList);},
+      interval < 1 ? 1000:interval*1000);
+  }
+  _startOneScan(productVendorList) {
+    this.singleScan(productVendorList)
+      .then((portList) => {
+        this.emit('scanready', portList);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
   stopScan() {
     // Remove previous timer
