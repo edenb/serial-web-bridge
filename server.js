@@ -63,4 +63,9 @@ serial.on('scanready', (portList) => {
 });
 
 // Start Socket IO server
-io.listen(4000, {cookie: false});
+io.listen(4000, {
+  cookie: false,
+  cors: {
+    origin: "*"
+  }
+});
