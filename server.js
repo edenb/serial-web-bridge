@@ -11,7 +11,7 @@ io.on('connection', client => {
   if (serial.isOpen()) {
     io.emit('port', true, serial.path, '');
   } else {
-    io.emit('port', false, '', '');
+    io.emit('port', false, serial.path, '');
   }
   client.on('info', () => {
     io.emit('info', info);
