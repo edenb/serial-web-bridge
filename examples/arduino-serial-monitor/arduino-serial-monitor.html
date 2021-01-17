@@ -81,12 +81,11 @@
       socket.emit('open', selPath, Number(baudrate), 'InterByteTimeout', {interval: 100, maxBufferSize: 4096});
     };
     function updateSelectedPath() {
-      let curPathState = '-'
-      if (curPath !== '') {
-        curPathState = curPathOpen ? 'open' : 'close'
+      let curPathText = '-'
+      if (curPath !== '' && curPath !== null) {
+        curPathText = curPath + ' ' + (curPathOpen ? '(open)' : '(close)')
       }
-      document.getElementById("path-container").innerHTML = 'Selected port: \
-        ' + curPath + '<span &ensp;/> (' + curPathState  + ')'
+      document.getElementById("path-container").innerHTML = 'Selected port: ' + curPathText
     };
     function updatePathList() {
       if (curPathErr === '') {
