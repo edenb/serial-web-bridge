@@ -1,7 +1,7 @@
 {
-  "name": "usb-socketio-bridge",
+  "name": "serial-web-bridge",
   "version": "1.0.0",
-  "description": "USB Socket.IO bridge",
+  "description": "Access your local serial ports with a browser",
   "main": "server.js",
   "bin": "server.js",
   "scripts": {

@@ -12,10 +12,10 @@
       height: 100%;
     }
   </style>
-  <script src = "https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.1/socket.io.js"></script>
+  <script src = "https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js"></script>
   <script>
-    const bridgeConnectTxt = "USB Socket.IO bridge connected"
-    const bridgeDisconnectTxt = "No USB Socket.IO bridge"
+    const bridgeConnectTxt = "Serial web bridge connected"
+    const bridgeDisconnectTxt = "No serial web bridge"
     let pathList = []
     const baudrateList = [300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 74880, 115200,
       230400, 250000, 500000, 1000000, 2000000]
@@ -136,7 +136,7 @@
   </script>
 </head>
 <body>
-  <div id = "bridge-state-container">No USB Socket.IO bridge</div>
+  <div id = "bridge-state-container">No serial web bridge</div>
   <div id = "path-list-container"></div>
   <div id = "error-container"></div>
   <div id = "path-container"></div>
