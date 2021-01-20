@@ -1,9 +1,7 @@
 'use strict'
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
-// The InterByteTimeout parser is not part of the NPM modules, so line below doesn't work
-//const InterByteTimeout = require('@serialport/parser-inter-byte-timeout')
-const InterByteTimeout = require('./parser-inter-byte-timeout')
+const InterByteTimeout = require('@serialport/parser-inter-byte-timeout')
 const EventEmitter = require('events');
 
 module.exports = class Serial extends EventEmitter {
