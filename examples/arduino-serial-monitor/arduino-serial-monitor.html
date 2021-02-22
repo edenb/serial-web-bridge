@@ -132,6 +132,7 @@
     function send() {
       let data = document.getElementById("input").value + '\n\r';
       socket.emit('write', data);
+      document.getElementById("input").value = '';
     }
   </script>
 </head>
