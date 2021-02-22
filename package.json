@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "serialport": "^9.0.6",
-    "socket.io": "^3.0.3"
+    "serialport": "^9.0.7",
+    "socket.io": "^3.1.1"
   }
 }
