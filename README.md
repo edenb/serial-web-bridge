@@ -19,4 +19,4 @@ Start the Serial Web Bridge:
 ```bash
 npm start
 ```
-Open the [demo](./examples/arduino-serial-monitor/arduino-serial-monitor.html) in your browser.
+Open `<your working dir>\serial-web-bridge\examples\arduino-serial-monitor.html` in a web browser.
