@@ -21,4 +21,6 @@ npm start
 ```
 Open `<your working dir>\serial-web-bridge\examples\arduino-serial-monitor.html` in a web browser.
 
+The example below shows a browser controlling an ESP Easy device over the serial port.
+
 ![Screendump](/docs/img/screendump.png)
