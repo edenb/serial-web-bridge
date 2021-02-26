@@ -3,7 +3,7 @@
 # Serial Web Bridge
 The Serial Web Bridge provides access to your local serial ports from the browser. The bridge accesses the serial ports and acts as a local server for the web browser. Communication between this server and the browser is based on [Socket.IO](https://socket.io).
 
-![GitHub Logo](/docs/img/overview.png)
+![Overview](/docs/img/overview.png)
 
 ## Demo
 This project provides a simple example that works similar to the Arduino Serial Monitor.
@@ -20,3 +20,5 @@ Start the Serial Web Bridge:
 npm start
 ```
 Open `<your working dir>\serial-web-bridge\examples\arduino-serial-monitor.html` in a web browser.
+
+![Screendump](/docs/img/screendump.png)
