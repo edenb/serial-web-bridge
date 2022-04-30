@@ -1,7 +1,7 @@
 'use strict'
-const SerialPort = require('serialport')
-const Readline = require('@serialport/parser-readline')
-const InterByteTimeout = require('@serialport/parser-inter-byte-timeout')
+const { SerialPort } = require('serialport')
+const { ReadlineParser } = require('@serialport/parser-readline')
+const { InterByteTimeoutParser } = require('@serialport/parser-inter-byte-timeout')
 const EventEmitter = require('events');
 
 module.exports = class Serial extends EventEmitter {
@@ -12,7 +12,7 @@ module.exports = class Serial extends EventEmitter {
     this.port = null;
   }
   create(path, baudRate, parser, parserOptions) {
-    let newPort = new SerialPort(path, { autoOpen: false, baudRate: baudRate });
+    let newPort = new SerialPort({ path: path, autoOpen: false, baudRate: baudRate });
     newPort.on('open', () => {
       this.emit('open', newPort.path, '');
     })
@@ -23,11 +23,11 @@ module.exports = class Serial extends EventEmitter {
     switch (parser) {
       case 'Readline':
         // Example options: { delimiter: '\r\n' }
-        newParser = newPort.pipe(new Readline(parserOptions));
+        newParser = newPort.pipe(new ReadlineParser(parserOptions));
         break;
       case 'InterByteTimeout':
         // Example options: {interval: 100, maxBufferSize: 4096}
-        newParser = newPort.pipe(new InterByteTimeout(parserOptions));
+        newParser = newPort.pipe(new InterByteTimeoutParser(parserOptions));
         break;
       default:
         // Readline = default parser
