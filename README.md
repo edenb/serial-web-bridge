@@ -1,5 +1,4 @@
-[![Dependencies](https://img.shields.io/david/edenb/serial-web-bridge.svg)](https://david-dm.org/edenb/serial-web-bridge)
-[![DevDependencies](https://img.shields.io/david/dev/edenb/serial-web-bridge.svg)](https://david-dm.org/edenb/serial-web-bridge?type=dev)
+[![Depfu](https://badges.depfu.com/badges/af51a610767605eb8005979acff55c62/overview.svg)](https://depfu.com/github/edenb/serial-web-bridge?project_id=35255)
 # Serial Web Bridge
 The Serial Web Bridge provides access to your local serial ports from the browser. The bridge accesses the serial ports and acts as a local server for the web browser. Communication between this server and the browser is based on [Socket.IO](https://socket.io).
 
